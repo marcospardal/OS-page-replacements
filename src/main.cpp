@@ -8,7 +8,7 @@
 using namespace std;
 
 int main() {
-  cout << "Iniciando simulação de algoritmos de substgituicao" << endl;
+  cout << "Iniciando simulacao de algoritmos de substituicao" << endl;
   ifstream inputFile("../input.txt");
 
   if (!inputFile.is_open()) {

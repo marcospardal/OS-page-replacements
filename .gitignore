@@ -1,0 +1,5 @@
+## Removing executable
+/bin
+
+# Removing class builds
+/build

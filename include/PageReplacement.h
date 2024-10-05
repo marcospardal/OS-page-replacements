@@ -12,7 +12,7 @@ class PageReplacement {
     int numero_quadros = 0;
     int faltas_paginas = 0;
     string tipo;
-    std::vector<MemoryBucket> memory;
+    vector<MemoryBucket> memory;
 
   public:
     PageReplacement(int numero_quadros, string tipo);
@@ -21,9 +21,13 @@ class PageReplacement {
 
     virtual void replace_page(int page) = 0;
 
-    bool search_page(int page);
+    int search_page(int page);
 
-    void add_page(int page);
+    void reference_page(int page);
+
+    void insert_page(int page);
+
+    void use_page(int page);
 
     bool can_add_item();
 

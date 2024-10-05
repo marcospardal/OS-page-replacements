@@ -11,24 +11,33 @@ void PageReplacement::initialize_memory() {
   this->memory.reserve(this->numero_quadros);
 }
 
-bool PageReplacement::search_page(int page) {
-  for (auto& bucket : memory) {
-    if (bucket.get_bucket_value() == page) {
-      return true;
+int PageReplacement::search_page(int page) {
+  for (int index = 0; index < memory.size(); index++) {
+    if (memory[index].get_bucket_value() == page) {
+      return index;
     }
   }
-  return false;
+
+  return -1;
 }
 
-void PageReplacement::add_page(int page) {
-  bool havePage = this->search_page(page);
+void PageReplacement::reference_page(int page) {
+  int page_index = this->search_page(page);
+  bool have_page = page_index != -1;
 
-  if (!havePage) {
-    this->faltas_paginas++;
+  if (!have_page) this->insert_page(page);
+  else this->use_page(page_index);
+}
 
-    if (this->can_add_item()) this->create_item(page);
-    else this->replace_page(page);
-  }
+void PageReplacement::insert_page(int page) {
+  this->faltas_paginas++;
+
+  if (this->can_add_item()) this->create_item(page);
+  else this->replace_page(page);
+}
+
+void PageReplacement::use_page(int bucket_index) {
+  this->memory[bucket_index].use_bucket();
 }
 
 bool PageReplacement::can_add_item() {

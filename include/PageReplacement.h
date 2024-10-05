@@ -19,6 +19,8 @@ class PageReplacement {
 
     void initialize_memory();
 
+    void update_numero_quadros(int numero);
+
     virtual void replace_page(int page) = 0;
 
     int search_page(int page);

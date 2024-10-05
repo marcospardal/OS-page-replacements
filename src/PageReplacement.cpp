@@ -8,6 +8,7 @@ PageReplacement::PageReplacement(int numero_quadros, std::string tipo) {
 }
 
 void PageReplacement::initialize_memory() {
+  this->memory.clear();
   this->memory.reserve(this->numero_quadros);
 }
 
@@ -52,4 +53,9 @@ void PageReplacement::create_item(int page) {
 
 void PageReplacement::display_faltas() {
   std::cout << this->tipo << " " << this->faltas_paginas << std::endl;
+}
+
+void PageReplacement::update_numero_quadros(int numero_quadros) {
+  this->numero_quadros = numero_quadros;
+  this->initialize_memory();
 }

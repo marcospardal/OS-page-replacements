@@ -35,38 +35,37 @@ void OTM::execute() {
 }
 
 void OTM::replace_page(int page) {
-    std::vector<int> next_references_indexes(this->numero_quadros, -1);
+  int remove_index = this->find_remove_bucket_index();
 
-    // Preenche o vetor next_references_indexes
-    for (int index = 0; index < this->memory.size(); index++) {
-      for (int next_reference_index = 0; next_reference_index < this->next_pages_references.size(); next_reference_index++) {
-        if (this->next_pages_references[next_reference_index] == this->memory[index].get_bucket_value()) {
-          next_references_indexes[index] = next_reference_index;
-          break; // Não precisa continuar procurando se já encontrou
-        }
-      }
-    }
-
-    int remove_index = -1; // Inicializa como -1 para indicar "nenhum"
-
-    // Determina qual índice remover
-    for (int current_index = 0; current_index < this->memory.size(); current_index++) {
-      if (next_references_indexes[current_index] == -1) {
-        // Se não há referência futura, considere como candidato para remoção
-        remove_index = current_index;
-        break; // Se encontrar um sem referência, use-o
-      } else if (remove_index == -1 || 
-        next_references_indexes[current_index] > next_references_indexes[remove_index]) {
-        // Caso encontre um índice com uma referência futura mais distante
-        remove_index = current_index;
-      }
-    }
-
-    // Verifica se um índice válido foi encontrado para remoção
-    if (remove_index != -1) {
-      this->memory.erase(this->memory.begin() + remove_index);
-    }
-
-    // Adiciona a nova página
+  if (remove_index != -1) {
+    this->memory.erase(this->memory.begin() + remove_index);
     this->create_item(page);
+  }
+}
+
+int OTM::find_remove_bucket_index() {
+  std::vector<int> next_references_indexes(this->numero_quadros, -1);
+
+  for (int index = 0; index < this->memory.size(); index++) {
+    for (int next_reference_index = 0; next_reference_index < this->next_pages_references.size(); next_reference_index++) {
+      if (this->next_pages_references[next_reference_index] == this->memory[index].get_bucket_value()) {
+        next_references_indexes[index] = next_reference_index;
+        break;
+      }
+    }
+  }
+
+  int remove_index = -1;
+
+  for (int current_index = 0; current_index < this->memory.size(); current_index++) {
+    if (next_references_indexes[current_index] == -1) {
+      remove_index = current_index;
+      break;
+    } else if (remove_index == -1 || 
+      next_references_indexes[current_index] > next_references_indexes[remove_index]) {
+      remove_index = current_index;
+    }
+  }
+
+  return remove_index;
 }

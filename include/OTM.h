@@ -22,6 +22,8 @@ class OTM : public PageReplacement {
     void execute();
 
     void replace_page(int page) override;
+
+    int find_remove_bucket_index();
 };
 
 #endif
